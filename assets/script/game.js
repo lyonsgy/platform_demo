@@ -2,13 +2,31 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        is_debug: false,
+        gravity: cc.v2(0, -320), // 系统默认
         mapNode: cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        cc.director.getPhysicsManager().enabled = true;
+        let p = cc.director.getPhysicsManager()
+        p.enabled = true
+        // 独立的形状，打开一个调试区域，游戏图像的逻辑区域
+        // 开始调试
+        if (this.is_debug) { // 开启调试信息
+            let Bits = cc.PhysicsManager.DrawBits // 这个是我们要显示的类型
+            p.debugDrawFlags = Bits.e_jointBit | Bits.e_shapeBit
+        } else { // 关闭调试信息
+            p.debugDrawFlags = 0
+        }
+        // 重力加速度配置
+        p.gravity = this.gravity
+
+        // 打开碰撞设置
+        cc.director.getCollisionManager().enabled = true
+        cc.director.getCollisionManager().enabledDebugDraw = this.is_debug
+
         this.initMapNode(this.mapNode)
     },
 

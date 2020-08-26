@@ -1207,6 +1207,12 @@
       "__id__": 5
     },
     "_enabled": true,
+    "is_debug": true,
+    "gravity": {
+      "__type__": "cc.Vec2",
+      "x": 0,
+      "y": -320
+    },
     "mapNode": {
       "__id__": 15
     },
