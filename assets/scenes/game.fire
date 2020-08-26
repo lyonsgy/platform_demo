@@ -78,10 +78,10 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 28
+        "__id__": 30
       },
       {
-        "__id__": 29
+        "__id__": 31
       }
     ],
     "_prefab": null,
@@ -171,7 +171,7 @@
       "array": [
         0,
         0,
-        525.6774200971543,
+        527.4094709047232,
         0,
         0,
         0,
@@ -251,10 +251,10 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 26
+        "__id__": 28
       },
       {
-        "__id__": 27
+        "__id__": 29
       }
     ],
     "_prefab": null,
@@ -1039,6 +1039,12 @@
       },
       {
         "__id__": 25
+      },
+      {
+        "__id__": 26
+      },
+      {
+        "__id__": 27
       }
     ],
     "_prefab": null,
@@ -1158,19 +1164,51 @@
     "_density": 1,
     "_sensor": false,
     "_friction": 0.2,
-    "_restitution": 0,
+    "_restitution": 0.1,
     "body": null,
     "_offset": {
       "__type__": "cc.Vec2",
-      "x": 3.6,
+      "x": 1.8,
       "y": 2.3
     },
     "_size": {
       "__type__": "cc.Size",
-      "width": 15.8,
+      "width": 19.3,
       "height": 4.6
     },
     "_id": "9bzViVqJxFMLpzCJ1MYLxF"
+  },
+  {
+    "__type__": "ef2d9mkKEpB6Ys/gxcS/DAb",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 22
+    },
+    "_enabled": true,
+    "_id": "93yGlt4fhJO5YvLoqrQOxi"
+  },
+  {
+    "__type__": "cc.Animation",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 22
+    },
+    "_enabled": true,
+    "_defaultClip": {
+      "__uuid__": "765b3cd5-4c1f-4c7b-b77e-76d58a316c91"
+    },
+    "_clips": [
+      {
+        "__uuid__": "765b3cd5-4c1f-4c7b-b77e-76d58a316c91"
+      },
+      {
+        "__uuid__": "82b235e9-13ad-4fea-8be3-d3219fab6371"
+      }
+    ],
+    "playOnLoad": true,
+    "_id": "a78bBcvyVLcJI4ey4Zpcjg"
   },
   {
     "__type__": "cc.Widget",
@@ -1207,7 +1245,7 @@
       "__id__": 5
     },
     "_enabled": true,
-    "is_debug": true,
+    "is_debug": false,
     "gravity": {
       "__type__": "cc.Vec2",
       "x": 0,
