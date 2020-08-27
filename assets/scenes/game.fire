@@ -171,7 +171,7 @@
       "array": [
         0,
         0,
-        527.4094709047232,
+        432.14667648843493,
         0,
         0,
         0,
@@ -1070,8 +1070,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        0,
-        -75.784,
+        -82.553,
+        -98.589,
         0,
         0,
         0,
@@ -1164,7 +1164,7 @@
     "_density": 1,
     "_sensor": false,
     "_friction": 0.2,
-    "_restitution": 0.1,
+    "_restitution": 0.2,
     "body": null,
     "_offset": {
       "__type__": "cc.Vec2",
@@ -1201,10 +1201,19 @@
     },
     "_clips": [
       {
+        "__uuid__": "82b235e9-13ad-4fea-8be3-d3219fab6371"
+      },
+      {
         "__uuid__": "765b3cd5-4c1f-4c7b-b77e-76d58a316c91"
       },
       {
-        "__uuid__": "82b235e9-13ad-4fea-8be3-d3219fab6371"
+        "__uuid__": "2d348fc7-1585-4afd-87c8-eda36fd90322"
+      },
+      {
+        "__uuid__": "2a274acd-c4b2-4d57-867e-430614b1878b"
+      },
+      {
+        "__uuid__": "f12d1987-e045-4dbd-a097-6eba2dfa44c4"
       }
     ],
     "playOnLoad": true,

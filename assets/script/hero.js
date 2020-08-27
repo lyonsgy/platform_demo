@@ -1,6 +1,6 @@
 const Input = {}
 const State = {
-    stand: 2,
+    stand: 1,
     attack: 2
 }
 
@@ -20,14 +20,25 @@ cc.Class({
         this.heroState = State.stand
         this.anima = 'idle'
         this.heroAni = this.node.getComponent(cc.Animation)
+        this.heroAni.on('finished', this.onAnimaFinished, this)
 
         cc.systemEvent.on('keydown', this.onKeyDown, this)
         cc.systemEvent.on('keyup', this.onKeyup, this)
+
     },
     onDestroy () {
         cc.systemEvent.off('keydown', this.onKeyDown, this)
         cc.systemEvent.off('keyup', this.onKeyup, this)
+        this.heroAni.off('finished', this.onAnimaFinished, this)
     },
+
+    onAnimaFinished (e, data) {
+        if (data.name === 'attack') {
+            this.heroState = State.stand
+            this.setAni('idle')
+        }
+    },
+
     setAni (anima) {
         if (this.anima === anima) return
         this.anima = anima
@@ -47,19 +58,47 @@ cc.Class({
         // 拿到 hero 当前的速度
         this.lv = this.node.getComponent(cc.RigidBody).linearVelocity
 
-        // 左右移动
-        if (Input[cc.macro.KEY.a] || Input[cc.macro.KEY.left]) {
-            this.sp.x = -1
-            this.node.scaleX = -scaleX
-            anima = 'run'
-        } else if (Input[cc.macro.KEY.d] || Input[cc.macro.KEY.right]) {
-            this.sp.x = 1
-            this.node.scaleX = scaleX
-            anima = 'run'
-        } else {
-            this.sp.x = 0
-            anima = 'idle'
+
+        switch (this.heroState) {
+            case State.stand: {
+                if (Input[cc.macro.KEY.j]) {
+                    this.heroState = State.attack
+                }
+                break;
+            }
+            case State.attack: {
+
+                break;
+            }
+            default:
+                break;
         }
+
+        if (this.heroState === State.attack) {
+            if (Input[cc.macro.KEY.j]) {
+                anima = 'attack'
+            }
+        }
+
+        if (this.heroState != State.stand) {
+            this.sp.x = 0
+        } else {
+            // 左右移动
+            if (Input[cc.macro.KEY.a] || Input[cc.macro.KEY.left]) {
+                this.sp.x = -1
+                this.node.scaleX = -scaleX
+                anima = 'run'
+            } else if (Input[cc.macro.KEY.d] || Input[cc.macro.KEY.right]) {
+                this.sp.x = 1
+                this.node.scaleX = scaleX
+                anima = 'run'
+            } else {
+                this.sp.x = 0
+                anima = 'idle'
+            }
+        }
+
+
         // // 上下移动
         // if (Input[cc.macro.KEY.w] || Input[cc.macro.KEY.up]) {
         //     this.sp.y = 1
@@ -75,6 +114,7 @@ cc.Class({
         }
         this.node.getComponent(cc.RigidBody).linearVelocity = this.lv
 
+        console.log(anima)
         if (anima) {
             this.setAni(anima)
         }
