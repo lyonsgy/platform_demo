@@ -17,6 +17,8 @@ cc.Class({
         this._speed = 200
         this.sp = cc.v2(0, 0)
 
+        this.combo = 0
+
         this.heroState = State.stand
         this.anima = 'idle'
         this.heroAni = this.node.getComponent(cc.Animation)
@@ -33,9 +35,9 @@ cc.Class({
     },
 
     onAnimaFinished (e, data) {
-        if (data.name === 'attack') {
+        if (data.name === 'attack' || data.name === 'attack2' || data.name === 'attack3') {
             this.heroState = State.stand
-            this.setAni('idle')
+            this.combo = (this.combo + 1) % 3
         }
     },
 
@@ -76,13 +78,21 @@ cc.Class({
 
         if (this.heroState === State.attack) {
             if (Input[cc.macro.KEY.j]) {
-                anima = 'attack'
+                if (this.combo === 0) {
+                    anima = 'attack'
+                } else if (this.combo === 1) {
+                    anima = 'attack2'
+                } else if (this.combo === 2) {
+                    anima = 'attack3'
+                }
             }
         }
 
         if (this.heroState != State.stand) {
             this.sp.x = 0
         } else {
+            // 回到站立状态攻击状态重置为0
+            this.combo = 0
             // 左右移动
             if (Input[cc.macro.KEY.a] || Input[cc.macro.KEY.left]) {
                 this.sp.x = -1
