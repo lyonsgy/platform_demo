@@ -38,6 +38,10 @@ cc.Class({
         if (data.name === 'attack' || data.name === 'attack2' || data.name === 'attack3') {
             this.heroState = State.stand
             this.combo = (this.combo + 1) % 3
+            setTimeout(() => {
+                if (this.heroState === State.attack) return
+                this.combo = 0
+            }, 100);
         }
     },
 
@@ -92,7 +96,7 @@ cc.Class({
             this.sp.x = 0
         } else {
             // 回到站立状态攻击状态重置为0
-            this.combo = 0
+            // this.combo = 0
             // 左右移动
             if (Input[cc.macro.KEY.a] || Input[cc.macro.KEY.left]) {
                 this.sp.x = -1
