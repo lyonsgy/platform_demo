@@ -1,7 +1,8 @@
 const Input = {}
 const State = {
     stand: 1,
-    attack: 2
+    attack: 2,
+    jump: 3
 }
 
 cc.Class({
@@ -70,9 +71,16 @@ cc.Class({
                 if (Input[cc.macro.KEY.j]) {
                     this.heroState = State.attack
                 }
+                if (Input[cc.macro.KEY.w] || Input[cc.macro.KEY.up] || Input[cc.macro.KEY.space]) {
+                    this.heroState = State.jump
+                }
                 break;
             }
             case State.attack: {
+
+                break;
+            }
+            case State.jump: {
 
                 break;
             }
@@ -92,7 +100,7 @@ cc.Class({
             }
         }
 
-        if (this.heroState != State.stand) {
+        if (this.heroState != State.stand && this.heroState != State.jump) {
             this.sp.x = 0
         } else {
             // 回到站立状态攻击状态重置为0
@@ -112,15 +120,6 @@ cc.Class({
             }
         }
 
-
-        // // 上下移动
-        // if (Input[cc.macro.KEY.w] || Input[cc.macro.KEY.up]) {
-        //     this.sp.y = 1
-        // } else if (Input[cc.macro.KEY.s] || Input[cc.macro.KEY.down]) {
-        //     this.sp.y = -1
-        // } else {
-        //     this.sp.y = 0
-        // } 
         if (this.sp.x) {
             this.lv.x = this.sp.x * this._speed
         } else {
@@ -128,10 +127,22 @@ cc.Class({
         }
         this.node.getComponent(cc.RigidBody).linearVelocity = this.lv
 
-        console.log(anima)
+        if (this.heroState === State.jump) {
+            if (Input[cc.macro.KEY.w] || Input[cc.macro.KEY.up] || Input[cc.macro.KEY.space]) {
+                anima = 'jump'
+                this.jump()
+            }
+        }
         if (anima) {
             this.setAni(anima)
         }
     },
-
+    jump () {
+        let rigidBody = this.node.getComponent(cc.RigidBody)
+        console.log(rigidBody.linearVelocity.y)
+        if (rigidBody.linearVelocity.y != 0) {
+            return
+        }
+        this.node.getComponent(cc.RigidBody).applyLinearImpulse(cc.v2(0, 180), this.node.getComponent(cc.RigidBody).getWorldCenter(), true)
+    },
 });
