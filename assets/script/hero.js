@@ -69,6 +69,10 @@ cc.Class({
             } else if (this.combo === 2) {
                 this.setAni('attack3')
             }
+            if (this.rb.linearVelocity.y != 0) { // 跳跃过程中不能连击
+                this.setAni('attack')
+                this.combo = 0
+            }
             this.lv.x = 0
         }
         this.rb.linearVelocity = this.lv

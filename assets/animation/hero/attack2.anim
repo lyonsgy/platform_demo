@@ -48,6 +48,60 @@
             }
           }
         ]
+      },
+      "cc.BoxCollider": {
+        "offset": [
+          {
+            "frame": 0.14285714285714285,
+            "value": {
+              "__type__": "cc.Vec2",
+              "x": 0,
+              "y": 0
+            }
+          },
+          {
+            "frame": 0.21428571428571427,
+            "value": {
+              "__type__": "cc.Vec2",
+              "x": 0,
+              "y": 14.5
+            }
+          },
+          {
+            "frame": 0.2857142857142857,
+            "value": {
+              "__type__": "cc.Vec2",
+              "x": 0,
+              "y": 0
+            }
+          }
+        ],
+        "size": [
+          {
+            "frame": 0.14285714285714285,
+            "value": {
+              "__type__": "cc.Size",
+              "width": 0,
+              "height": 0
+            }
+          },
+          {
+            "frame": 0.21428571428571427,
+            "value": {
+              "__type__": "cc.Size",
+              "width": 37.7,
+              "height": 28.9
+            }
+          },
+          {
+            "frame": 0.2857142857142857,
+            "value": {
+              "__type__": "cc.Size",
+              "width": 0,
+              "height": 0
+            }
+          }
+        ]
       }
     }
   },
