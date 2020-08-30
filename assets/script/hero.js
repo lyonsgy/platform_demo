@@ -24,6 +24,7 @@ cc.Class({
         this.anima = 'idle'
         this.heroAni = this.node.getComponent(cc.Animation)
         this.rb = this.node.getComponent(cc.RigidBody)
+        this.boxCollider = this.node.getComponent(cc.BoxCollider)
         this.heroAni.on('finished', this.onAnimaFinished, this)
 
         cc.systemEvent.on('keydown', this.onKeyDown, this)
