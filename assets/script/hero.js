@@ -1,8 +1,7 @@
 const Input = {}
 const State = {
     stand: 1,
-    attack: 2,
-    jump: 3
+    attack: 2
 }
 
 cc.Class({
@@ -18,11 +17,13 @@ cc.Class({
         this._speed = 200
         this.sp = cc.v2(0, 0)
 
+        this.isJump = 0
         this.combo = 0
 
         this.heroState = State.stand
         this.anima = 'idle'
         this.heroAni = this.node.getComponent(cc.Animation)
+        this.rb = this.node.getComponent(cc.RigidBody)
         this.heroAni.on('finished', this.onAnimaFinished, this)
 
         cc.systemEvent.on('keydown', this.onKeyDown, this)
@@ -57,67 +58,39 @@ cc.Class({
     onKeyup (e) {
         Input[e.keyCode] = 0
     },
-    update (dt) {
-        let anima = this.anima
+    // 攻击
+    attack () {
+        this.lv = this.rb.linearVelocity
+        if (Input[cc.macro.KEY.j]) {
+            if (this.combo === 0) {
+                this.setAni('attack')
+            } else if (this.combo === 1) {
+                this.setAni('attack2')
+            } else if (this.combo === 2) {
+                this.setAni('attack3')
+            }
+            this.lv.x = 0
+        }
+        this.rb.linearVelocity = this.lv
+    },
+    // 移动
+    move () {
         let scaleX = Math.abs(this.node.scaleX)
-
         // 利用物理引擎控制移动
         // 拿到 hero 当前的速度
-        this.lv = this.node.getComponent(cc.RigidBody).linearVelocity
-
-
-        switch (this.heroState) {
-            case State.stand: {
-                if (Input[cc.macro.KEY.j]) {
-                    this.heroState = State.attack
-                }
-                if (Input[cc.macro.KEY.w] || Input[cc.macro.KEY.up] || Input[cc.macro.KEY.space]) {
-                    this.heroState = State.jump
-                }
-                break;
-            }
-            case State.attack: {
-
-                break;
-            }
-            case State.jump: {
-
-                break;
-            }
-            default:
-                break;
-        }
-
-        if (this.heroState === State.attack) {
-            if (Input[cc.macro.KEY.j]) {
-                if (this.combo === 0) {
-                    anima = 'attack'
-                } else if (this.combo === 1) {
-                    anima = 'attack2'
-                } else if (this.combo === 2) {
-                    anima = 'attack3'
-                }
-            }
-        }
-
-        if (this.heroState != State.stand && this.heroState != State.jump) {
-            this.sp.x = 0
+        this.lv = this.rb.linearVelocity
+        // 左右移动
+        if (Input[cc.macro.KEY.a] || Input[cc.macro.KEY.left]) {
+            this.sp.x = -1
+            this.node.scaleX = -scaleX
+            this.setAni('run')
+        } else if (Input[cc.macro.KEY.d] || Input[cc.macro.KEY.right]) {
+            this.sp.x = 1
+            this.node.scaleX = scaleX
+            this.setAni('run')
         } else {
-            // 回到站立状态攻击状态重置为0
-            // this.combo = 0
-            // 左右移动
-            if (Input[cc.macro.KEY.a] || Input[cc.macro.KEY.left]) {
-                this.sp.x = -1
-                this.node.scaleX = -scaleX
-                anima = 'run'
-            } else if (Input[cc.macro.KEY.d] || Input[cc.macro.KEY.right]) {
-                this.sp.x = 1
-                this.node.scaleX = scaleX
-                anima = 'run'
-            } else {
-                this.sp.x = 0
-                anima = 'idle'
-            }
+            this.sp.x = 0
+            this.setAni('idle')
         }
 
         if (this.sp.x) {
@@ -125,24 +98,44 @@ cc.Class({
         } else {
             this.lv.x = 0
         }
-        this.node.getComponent(cc.RigidBody).linearVelocity = this.lv
+        this.rb.linearVelocity = this.lv
+    },
+    // 跳跃
+    jump () {
+        if (this.rb.linearVelocity.y != 0) return
+        this.rb.applyLinearImpulse(cc.v2(0, 140), this.rb.getWorldCenter(), true)
+    },
+    update (dt) {
+        // 状态切换
+        switch (this.heroState) {
+            case State.stand: {
+                if (Input[cc.macro.KEY.j]) {
+                    this.heroState = State.attack
+                }
+                if (Input[cc.macro.KEY.w] || Input[cc.macro.KEY.up] || Input[cc.macro.KEY.space]) {
+                    this.isJump = 1
+                }
+                break;
+            }
+            case State.attack: {
 
-        if (this.heroState === State.jump) {
+                break;
+            }
+            default:
+                break;
+        }
+
+        if (this.heroState === State.attack) { // 攻击
+            this.attack()
+        } else if (this.heroState === State.stand) { // 移动
+            this.move()
+        }
+
+        if (this.isJump) { // 跳跃
             if (Input[cc.macro.KEY.w] || Input[cc.macro.KEY.up] || Input[cc.macro.KEY.space]) {
-                anima = 'jump'
+                // anima = 'jump'
                 this.jump()
             }
         }
-        if (anima) {
-            this.setAni(anima)
-        }
-    },
-    jump () {
-        let rigidBody = this.node.getComponent(cc.RigidBody)
-        console.log(rigidBody.linearVelocity.y)
-        if (rigidBody.linearVelocity.y != 0) {
-            return
-        }
-        this.node.getComponent(cc.RigidBody).applyLinearImpulse(cc.v2(0, 180), this.node.getComponent(cc.RigidBody).getWorldCenter(), true)
     },
 });
