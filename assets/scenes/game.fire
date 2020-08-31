@@ -171,7 +171,7 @@
       "array": [
         0,
         0,
-        424.65383453608973,
+        425.20860098677053,
         0,
         0,
         0,
@@ -1071,7 +1071,7 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        0,
+        96.691,
         -111.744,
         0,
         0,
@@ -1214,6 +1214,12 @@
       },
       {
         "__uuid__": "fc235425-e157-4171-b949-f180a52dda6a"
+      },
+      {
+        "__uuid__": "39799144-03db-4beb-9442-10780ef5b152"
+      },
+      {
+        "__uuid__": "92e1ac08-4bdb-4917-baef-bcd19e701d41"
       }
     ],
     "playOnLoad": false,
@@ -1309,6 +1315,8 @@
       "__id__": 22
     },
     "_enabled": true,
+    "vision_field": 150,
+    "attack_field": 30,
     "_id": "46eFZYl8pFpa85dh7NgvTO"
   },
   {

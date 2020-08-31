@@ -9,6 +9,8 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        vision_field: 150,
+        attack_field: 30,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -28,13 +30,10 @@ cc.Class({
 
         this.ani.on('finished', this.onAnimaFinished, this)
 
-        this.moveLeft = true
+        this.moveLeft = false
         this.moveRight = false
 
-        setInterval(() => {
-            this.moveLeft = !this.moveLeft
-            this.moveRight = !this.moveRight
-        }, 1000);
+        this.playerNode = cc.find('Canvas/bg/hero')
     },
 
     onAnimaFinished (e, data) {
@@ -52,7 +51,7 @@ cc.Class({
     },
 
     hurt () {
-        if (this.hurt) return
+        if (this.isHit) return
         this.isHit = true
         this.enemyState = State.hurt
 
@@ -60,7 +59,7 @@ cc.Class({
         this.lv.x = 0
         this.rb.linearVelocity = this.lv
 
-        this.ani.play('hurt')
+        this.setAni('hurt')
     },
     // 攻击
     attack () {
@@ -72,8 +71,6 @@ cc.Class({
     // 移动
     move () {
         let scaleX = Math.abs(this.node.scaleX)
-        // 利用物理引擎控制移动
-        // 拿到 hero 当前的速度
         this.lv = this.rb.linearVelocity
         // 左右移动
         if (this.moveLeft) {
@@ -107,23 +104,49 @@ cc.Class({
         this.ani.play(anima)
     },
     enemyAction (tt) {
+        let p_pos = this.playerNode.position
+        let e_pos = this.node.position
 
+        let dis = cc.Vec2.distance(e_pos, p_pos)
+
+        if (dis < this.attack_field) {
+            console.log('攻击')
+            this.moveLeft = false
+            this.moveRight = false
+            this.enemyState = State.attack
+        } else if (dis <= this.vision_field) {
+            console.log('追击')
+            let v = p_pos.sub(e_pos)
+            if (v.x < 0) { // 向左
+                this.moveLeft = true
+                this.moveRight = false
+            } else { // 向右
+                this.moveLeft = false
+                this.moveRight = true
+            }
+            this.enemyState = State.stand
+        } else {
+            console.log('静止')
+            this.moveLeft = false
+            this.moveRight = false
+            this.enemyState = State.stand
+        }
     },
 
     update (dt) {
         // 状态切换
-        // this.tt += dt
+        this.tt += dt
 
-        // if (this.tt >= 0.3 && this.enemyState === State.stand) {
-        //     this.enemyAction(dt)
-        //     this.tt = 0
-        // }
+        if (this.tt >= 0.3 && this.enemyState === State.stand) {
+            this.enemyAction(dt)
+            this.tt = 0
+        }
 
-        // if (this.enemyState === State.attack) { // 攻击
-        //     this.attack()
-        // } else if (this.enemyState === State.stand) { // 移动
-        //     this.move()
-        // }
+        if (this.enemyState === State.attack) { // 攻击
+            this.attack()
+        } else if (this.enemyState === State.stand) { // 移动
+            this.move()
+        }
 
         // if (this.isJump) { // 跳跃
         //     if (Input[cc.macro.KEY.w] || Input[cc.macro.KEY.up] || Input[cc.macro.KEY.space]) {
@@ -131,6 +154,5 @@ cc.Class({
         //         this.jump()
         //     }
         // }
-        this.move()
     },
 });
