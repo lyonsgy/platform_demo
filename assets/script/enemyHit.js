@@ -14,7 +14,7 @@ cc.Class({
     // 碰撞回调
     onCollisionEnter (other, self) {
         let bc = other.getComponent(cc.BoxCollider)
-        if (other.node.group === 'hero' && bc.size.width * bc.size.height > 0) {
+        if (other.node.group === 'hero' && other.tag === 1) {
             this.enemy.hurt()
         }
     },
