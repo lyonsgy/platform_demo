@@ -1,7 +1,9 @@
 const Input = {}
 const State = {
     stand: 1,
-    attack: 2
+    attack: 2,
+    hurt: 3,
+    dead: 4,
 }
 
 cc.Class({
@@ -134,6 +136,8 @@ cc.Class({
             this.attack()
         } else if (this.heroState === State.stand) { // 移动
             this.move()
+        } else if (this.heroState === State.hurt) { // 受伤
+            this.setAni('hurt')
         }
 
         if (this.isJump) { // 跳跃
@@ -141,6 +145,17 @@ cc.Class({
                 // anima = 'jump'
                 this.jump()
             }
+        }
+    },
+
+    // 碰撞回调
+    onCollisionEnter (other, self) {
+        // console.log('__heroTag', self.tag)
+        // console.log('__enemyTag', other.tag)
+        if (other.node.group === 'enemy' && other.tag === 0 && other.size.width * other.size.height != 0) {
+            // 受伤
+            console.log('受伤')
+            this.heroState = State.hurt
         }
     },
 });
