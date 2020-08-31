@@ -3,6 +3,7 @@ const State = {
     stand: 1,
     attack: 2,
     hurt: 3,
+    dead: 4,
 }
 
 cc.Class({
@@ -41,12 +42,15 @@ cc.Class({
             this.hp--
             this.isHit = false
             this.enemyState = State.stand
-            if (this.hp === 0) {
-                this.node.destroy()
+            if (this.hp <= 0) {
+                this.hp = 0
+                this.enemyState = State.dead
             }
         } else if (data.name === 'attack') {
             this.setAni('idle')
             this.enemyState = State.stand
+        } else if (data.name === 'dead') {
+            this.node.destroy()
         }
     },
 
@@ -146,6 +150,9 @@ cc.Class({
             this.attack()
         } else if (this.enemyState === State.stand) { // 移动
             this.move()
+        } else if (this.enemyState === State.dead) {
+            this.node.getChildByName('body').getComponent(cc.BoxCollider).enabled = false
+            this.setAni('dead')
         }
 
         // if (this.isJump) { // 跳跃
