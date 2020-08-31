@@ -10,7 +10,7 @@ cc.Class({
     onLoad () {
         this.hp = 5
         this.isHit = false
-        this.ani = this.node.getComponent(cc.Animation)
+        this.ani = this.node.getChildByName('body').getComponent(cc.Animation)
 
         this.ani.on('finished', this.onAnimaFinished, this)
     },
@@ -23,13 +23,10 @@ cc.Class({
         }
     },
 
-    // 碰撞回调
-    onCollisionEnter (other, self) {
-        let bc = other.getComponent(cc.BoxCollider)
-        if (other.node.group === 'hero' && bc.size.width * bc.size.height > 0) {
-            this.isHit = true
-            this.ani.play('hurt')
-        }
+    hurt () {
+        console.log(this.hp)
+        this.isHit = true
+        this.ani.play('hurt')
     },
 
     update (dt) { },
