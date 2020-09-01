@@ -1,0 +1,37 @@
+{
+  "__type__": "cc.AnimationClip",
+  "_name": "squat",
+  "_objFlags": 0,
+  "_native": "",
+  "_duration": 0.3,
+  "sample": 10,
+  "speed": 1,
+  "wrapMode": 2,
+  "curveData": {
+    "comps": {
+      "cc.Sprite": {
+        "spriteFrame": [
+          {
+            "frame": 0,
+            "value": {
+              "__uuid__": "8dde8e87-2399-4f16-abba-bc390cf46915"
+            }
+          },
+          {
+            "frame": 0.1,
+            "value": {
+              "__uuid__": "31dd585e-8215-434c-8431-3d6005690128"
+            }
+          },
+          {
+            "frame": 0.2,
+            "value": {
+              "__uuid__": "25a9c02e-e45e-423a-a5d6-a8026c65ac00"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "events": []
+}

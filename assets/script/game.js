@@ -53,5 +53,8 @@ cc.Class({
             }
         }
     },
+    gameOver () {
+        cc.director.loadScene('game')
+    }
     // update (dt) {},
 });

@@ -16,6 +16,8 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
+        this.hp = 5
+        this.isHit = false
         this._speed = 200
         this.sp = cc.v2(0, 0)
 
@@ -36,17 +38,28 @@ cc.Class({
     onDestroy () {
         cc.systemEvent.off('keydown', this.onKeyDown, this)
         cc.systemEvent.off('keyup', this.onKeyup, this)
-        this.heroAni.off('finished', this.onAnimaFinished, this)
     },
 
     onAnimaFinished (e, data) {
-        if (data.name === 'attack' || data.name === 'attack2' || data.name === 'attack3') {
+        if (data.name === 'hurt') {
+            this.hp--
+            this.isHit = false
+            this.heroState = State.stand
+            if (this.hp <= 0) {
+                this.hp = 0
+                this.heroState = State.dead
+            }
+        } else if (data.name === 'attack' || data.name === 'attack2' || data.name === 'attack3') {
             this.heroState = State.stand
             this.combo = (this.combo + 1) % 3
             setTimeout(() => {
                 if (this.heroState === State.attack) return
                 this.combo = 0
             }, 100);
+        } else if (data.name === 'dead') {
+            console.log('game over')
+            this.gameNode = cc.find('Canvas/bg')
+            this.gameNode.getComponent('game').gameOver()
         }
     },
 
@@ -138,6 +151,9 @@ cc.Class({
             this.move()
         } else if (this.heroState === State.hurt) { // 受伤
             this.setAni('hurt')
+        } else if (this.heroState === State.dead) {
+            this.node.getChildByName('body').getComponent(cc.BoxCollider).enabled = false
+            this.setAni('dead')
         }
 
         if (this.isJump) { // 跳跃
@@ -147,15 +163,15 @@ cc.Class({
             }
         }
     },
+    hurt () {
+        if (this.isHit) return
+        this.isHit = true
+        this.heroState = State.hurt
 
-    // 碰撞回调
-    onCollisionEnter (other, self) {
-        // console.log('__heroTag', self.tag)
-        // console.log('__enemyTag', other.tag)
-        if (other.node.group === 'enemy' && other.tag === 0 && other.size.width * other.size.height != 0) {
-            // 受伤
-            console.log('受伤')
-            this.heroState = State.hurt
-        }
+        this.lv = this.rb.linearVelocity
+        this.lv.x = 0
+        this.rb.linearVelocity = this.lv
+
+        this.setAni('hurt')
     },
 });
